@@ -1,3 +1,6 @@
+// build and run this code and in the web browser enter "localhost:3000" and you should see the string with formatting
+// to see the actual string, right click and select "View page source"
+
 package main
 
 import (
@@ -9,6 +12,7 @@ func handlerFunc(w http.ResponseWriter, r *http.Request) { // function run anyti
 	// "http.ResponseWriter" is where you write the response
 	// "http.Request" is request object where you have info regarding the request
 	fmt.Fprint(w, "<h1>Welcome to my awesome site</h1>") // the string output is html with heading tag "h1"
+	// giving the html string will display string with formatting
 }
 
 func main() {
