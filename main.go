@@ -1,5 +1,3 @@
-// using "html/template" to prevent html injection attack
-
 package main
 
 import (
@@ -33,21 +31,20 @@ func custom404(w http.ResponseWriter, r *http.Request) {
 
 type User struct {
 	Name string
+	Dog  string
 }
 
 func main() {
-	t, err := template.ParseFiles("hello.gohtml") // "text.template::ParseFiles" is used instead of "html.template::ParseFiles"
+	t, err := template.ParseFiles("hello.gohtml")
 	if err != nil {
 		panic(err)
 	}
 
 	data := User{
-		Name: "<script>alert(\"hi\")</script>",
+		Name: "Sid Stark",
+		Dog:  "Kencha",
 	}
-	err = t.Execute(os.Stdout, data) // prints "<h1>Hello, &lt;script&gt;alert(&#34;hi&#34;)&lt;/script&gt;</h1>"
-	// so when rendered by browser you'll see "Hello, <script>alert("hi")</script>"
-	// so injection attack can happen
-	// Hence, it is better to use context aware templating packages rather than plain "text/template" package
+	err = t.Execute(os.Stdout, data)
 	if err != nil {
 		panic(err)
 	}
