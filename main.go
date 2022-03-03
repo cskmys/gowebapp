@@ -32,6 +32,7 @@ func custom404(w http.ResponseWriter, r *http.Request) {
 type User struct {
 	Name string
 	Dog  string
+	IQ   int
 }
 
 func main() {
@@ -43,6 +44,7 @@ func main() {
 	data := User{
 		Name: "Sid Stark",
 		Dog:  "Kencha",
+		IQ:   145,
 	}
 	err = t.Execute(os.Stdout, data)
 	if err != nil {
