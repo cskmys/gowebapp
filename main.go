@@ -32,10 +32,7 @@ func main() {
 	router.HandleFunc("/", home)
 	router.HandleFunc("/contact", contact)
 	router.HandleFunc("/faq", faq)
-	router.NotFoundHandler = http.HandlerFunc(custom404) // turning "custom404" into "http.Handler" requires "http.HandlerFunc"
-	// "http.Handler" is an interface that expects implementation of "ServerHTTP" and "http.HandlerFunc" implements "ServeHTTP" by calling the function passed to it
-	// the function passed to "http.HandlerFunc" will have "(w http.ResponseWriter, r *http.Request)" as parameters
-	// hence, "http.HandlerFunc" is an adaptor that converts regular functions with "(w http.ResponseWriter, r *http.Request)" parameters into "http.Handler"
+	router.NotFoundHandler = http.HandlerFunc(custom404)
 
 	http.ListenAndServe(":3000", router)
 }
