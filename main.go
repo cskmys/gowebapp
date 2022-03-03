@@ -29,10 +29,14 @@ func custom404(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<h1>Can't find the page you are looking for</h1><p>email me if you keep seeing this</p>")
 }
 
+type Dog struct {
+	Name string
+	IQ   int
+}
+
 type User struct {
 	Name string
-	Dog  string
-	IQ   int
+	Dog  Dog
 }
 
 func main() {
@@ -43,8 +47,10 @@ func main() {
 
 	data := User{
 		Name: "Sid Stark",
-		Dog:  "Kencha",
-		IQ:   145,
+		Dog: Dog{
+			Name: "Kencha",
+			IQ:   148,
+		},
 	}
 	err = t.Execute(os.Stdout, data)
 	if err != nil {
