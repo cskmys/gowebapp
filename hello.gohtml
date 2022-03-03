@@ -1,3 +1,8 @@
 <h1>Hello, {{.Name}}</h1>
-<p1>{{.Dog}} is your best friend</p1>
-<p2>He has an IQ of {{.IQ}}</p2>
+<p>{{.Dog}} is your best friend</p>
+<p1>
+    He has an IQ of {{.IQ}}. He runs at speed of {{.Speed}}.
+    He plays with {{range .Toys}}<b>{{.}}</b> {{end}}.
+    His favorite toy is {{index .Toys 0}}.
+    He is a good boy of {{index .Body "height"}} and {{index .Body "weight"}}.
+</p1>

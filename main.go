@@ -30,9 +30,12 @@ func custom404(w http.ResponseWriter, r *http.Request) {
 }
 
 type User struct {
-	Name string
-	Dog  string
-	IQ   int
+	Name  string
+	Dog   string
+	IQ    int
+	Speed float64
+	Toys  []string
+	Body  map[string]string
 }
 
 func main() {
@@ -42,9 +45,15 @@ func main() {
 	}
 
 	data := User{
-		Name: "Sid Stark",
-		Dog:  "Kencha",
-		IQ:   145,
+		Name:  "Sid Stark",
+		Dog:   "Kencha",
+		IQ:    145,
+		Speed: 3.14,
+		Toys:  []string{"Bone", "Rope"},
+		Body: map[string]string{
+			"height": "100 cm",
+			"weight": "20 kg",
+		},
 	}
 	err = t.Execute(os.Stdout, data)
 	if err != nil {
