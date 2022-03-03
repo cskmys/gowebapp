@@ -18,9 +18,8 @@ func contact(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/", home)           // for Gorilla mux "/" does not mean route all the URLs, it only means route "/" URL
-	router.HandleFunc("/contact", contact) // "/contact" means only "/contact" not "/contact/"
-	// for any URL other than "/" and "/contact" mux throws its own default 404 page(even "/contact/" will give 404 page)
+	router.HandleFunc("/", home)
+	router.HandleFunc("/contact", contact)
 
 	http.ListenAndServe(":3000", router)
 }
