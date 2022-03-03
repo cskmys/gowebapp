@@ -1,26 +1,29 @@
-// here we replace the default servemux with a 3rd party servemux
-
-// set "GOPATH" to somewhere else except where this file is
-// create a new "go.mod" file by doing "go mod init"
-// to install this "httprouter" package do "go get github.com/julienschmidt/httprouter"
-
 package main
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
-func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) { // ":name" regex matching is done with URL and the name field is available in "ps"
-	// with default servemux we had to manually do the regex matching to extract name from url, here it is automatically done and available in "ps"
+func handleFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, "<h1>Welcome %s!</h1>", ps.ByName("name"))
+	if r.URL.Path == "/" {
+		fmt.Fprint(w, "<h1>Welcome to my Awesome site!</h1>")
+	} else if r.URL.Path == "/contact" {
+		fmt.Fprint(w, "To get in touch, send an email to <a href=\"mailto:support@lenslocked.com\">support@lenslocked.com</a>")
+	} else {
+		// this part will not run as Gorilla mux will throw its own 404 page in case of no url match
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, "<h1>Can't find the page you are looking for</h1><p>email me if you keep seeing this</p>")
+	}
 }
 
 func main() {
-	mux := httprouter.New()
-	mux.GET("/users/:name", Hello) // now, for all paths "localhost:3000/users/<name>", "Hello" gets called
+	router := mux.NewRouter()
+	router.HandleFunc("/", handleFunc) // for Gorilla mux "/" does not mean route all the URLs, it only means route "/" URL
+	router.HandleFunc("/contact", handleFunc)
+	// for any URL other than "/" and "/contact" mux throws its own default 404 page(even "/contact/" will give 404 page)
 
-	http.ListenAndServe(":3000", mux)
+	http.ListenAndServe(":3000", router)
 }
