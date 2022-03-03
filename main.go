@@ -6,7 +6,9 @@ import (
 )
 
 func handlerFunc(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<h1>Welcome to my awesome site</h1>")
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "<h1>Welcome to my Awesome site!</h1>")
+	fmt.Fprint(w, "To get in touch, send an email to <a href=\"mailto:support@lenslocked.com\">support@lenslocked.com</a>")
 }
 
 func main() {
