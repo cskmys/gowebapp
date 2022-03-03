@@ -1,16 +1,13 @@
-// injection attacks can be used run nefarious code
-// now we are using "text/template" package to illustrate what is an injection attack via html code
-// simply using "html/template" is enough to prevent injection attack via html code
+// using "html/template" to prevent html injection attack
 
 package main
 
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"html"
+	"html/template"
 	"net/http"
 	"os"
-	"text/template"
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -45,28 +42,15 @@ func main() {
 	}
 
 	data := User{
-		Name: "<script>alert(\"hi\")</script>", // writing html code in text
+		Name: "<script>alert(\"hi\")</script>",
 	}
-	err = t.Execute(os.Stdout, data) // prints "<h1>Hello, <script>alert("hi")</script></h1>"
-	// when this text is served by server to browser, and the browser runs it, text "Hello, " and a pop-up saying "hi" can be seen on the browser
-	// what if the "Name" field is supplied by an external agent and the string was a nefarious code
-	// then harmful things can be done when the html is served by the server and run by the browser
-	// this is injection attack
+	err = t.Execute(os.Stdout, data) // prints "<h1>Hello, &lt;script&gt;alert(&#34;hi&#34;)&lt;/script&gt;</h1>"
+	// so when rendered by browser you'll see "Hello, <script>alert("hi")</script>"
+	// so injection attack can happen
+	// Hence, it is better to use context aware templating packages rather than plain "text/template" package
 	if err != nil {
 		panic(err)
 	}
-
-	// as a solution you can encode few characters such as "<", ">", "/" and "&"
-	data.Name = html.EscapeString(data.Name) // after encoding "<h1>Hello, <script>alert("hi")</script></h1>" is converted into "<h1>Hello, &lt;script&gt;alert(&#34;hi&#34;)&lt;/script&gt;</h1>"
-	err = t.Execute(os.Stdout, data)
-	// Now when this text is served by server to browser, and the browser runs it, you'll just see "Hello, <script>alert("hi")</script>"
-	// there is no pop-up like before
-	// So, no nefarious things can be done when the string is encoded before being served to the browser
-	if err != nil {
-		panic(err)
-	}
-
-	// all the encoding logic to prevent html injection attack is already in "html/template" package, so you can simply use that instead of "text/template" package
 
 	router := mux.NewRouter()
 	router.HandleFunc("/", home)
