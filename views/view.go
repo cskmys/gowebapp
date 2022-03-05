@@ -3,6 +3,7 @@ package views
 import (
 	"fmt"
 	"html/template"
+	"net/http"
 	"path/filepath"
 )
 
@@ -14,6 +15,10 @@ var (
 type View struct {
 	Template *template.Template
 	Layout   string
+}
+
+func (v *View) Render(w http.ResponseWriter, data interface{}) error { // "interface{}" type is used to pass argument of type "any"
+	return v.Template.ExecuteTemplate(w, v.Layout, data)
 }
 
 func NewView(layout string, files ...string) *View {

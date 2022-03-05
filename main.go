@@ -11,14 +11,14 @@ var homeView, contactView, custom404View *views.View
 
 func home(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeView.Template.ExecuteTemplate(w, homeView.Layout, nil); err != nil {
+	if err := homeView.Render(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 func contact(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactView.Template.ExecuteTemplate(w, contactView.Layout, nil); err != nil {
+	if err := contactView.Render(w, nil); err != nil {
 		panic(err)
 	}
 }
@@ -26,7 +26,7 @@ func contact(w http.ResponseWriter, _ *http.Request) {
 func custom404(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusNotFound)
-	if err := custom404View.Template.ExecuteTemplate(w, custom404View.Layout, nil); err != nil {
+	if err := custom404View.Render(w, nil); err != nil {
 		panic(err)
 	}
 }
