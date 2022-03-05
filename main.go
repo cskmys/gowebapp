@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"gowebapp/views"
-	"log"
 	"net/http"
 )
 
@@ -11,24 +10,18 @@ var homeView, contactView, custom404View *views.View
 
 func home(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeView.Render(w, nil); err != nil {
-		panic(err)
-	}
+	must(homeView.Render(w, nil))
 }
 
 func contact(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactView.Render(w, nil); err != nil {
-		panic(err)
-	}
+	must(contactView.Render(w, nil))
 }
 
 func custom404(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusNotFound)
-	if err := custom404View.Render(w, nil); err != nil {
-		panic(err)
-	}
+	must(custom404View.Render(w, nil))
 }
 
 func main() {
@@ -41,5 +34,11 @@ func main() {
 	router.HandleFunc("/contact", contact)
 	router.NotFoundHandler = http.HandlerFunc(custom404)
 
-	log.Fatal(http.ListenAndServe(":3000", router))
+	must(http.ListenAndServe(":3000", router))
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
