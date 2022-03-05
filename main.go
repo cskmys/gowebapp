@@ -7,12 +7,16 @@ import (
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
-	"os"
 )
 
+var homeTemplate *template.Template // just for now, we are using global variables to keep things simple
+// but in the later stage where we get code ready for production, we will remove them and clean up
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>Welcome to my Awesome site!</h1>")
+	if err := homeTemplate.Execute(w, nil); err != nil { // passing "nil" as there is no dynamic data to insert into the template
+		panic(err) // if you don't panic, you may see weird or half-rendered html page which makes you wonder where the bug is
+		// hence better to panic here
+	}
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
@@ -36,20 +40,11 @@ type User struct {
 }
 
 func main() {
-	t, err := template.ParseFiles("hello.gohtml") // "text.template::ParseFiles" is used instead of "html.template::ParseFiles"
+	var err error
+	homeTemplate, err = template.ParseFiles("views/home.gohtml") // just for now, we'll need to execute the code from the root of this directory as relative path is used
+	// will change using the relative path in the future
 	if err != nil {
-		panic(err)
-	}
-
-	data := User{
-		Name: "<script>alert(\"hi\")</script>",
-	}
-	err = t.Execute(os.Stdout, data) // prints "<h1>Hello, &lt;script&gt;alert(&#34;hi&#34;)&lt;/script&gt;</h1>"
-	// so when rendered by browser you'll see "Hello, <script>alert("hi")</script>"
-	// so injection attack can happen
-	// Hence, it is better to use context aware templating packages rather than plain "text/template" package
-	if err != nil {
-		panic(err)
+		panic(err) // normally you should be handling errors more gracefully but for an unrecoverable error such as this panic will do
 	}
 
 	router := mux.NewRouter()
