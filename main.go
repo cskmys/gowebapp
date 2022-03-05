@@ -1,59 +1,55 @@
-// using "html/template" to prevent html injection attack
-
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"html/template"
+	"log"
 	"net/http"
 )
 
-var homeTemplate, contactTemplate *template.Template
+var homeTemplate, contactTemplate, custom404Template *template.Template
 
-func home(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if err := homeTemplate.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
 
-func contact(w http.ResponseWriter, r *http.Request) {
+func contact(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if err := contactTemplate.Execute(w, nil); err != nil {
-		panic(err) // not a good idea to throw panic when program is running, but it is important to check for error otherwise
-		// you might not know why the page is rendered weirdly or partially
-		// for now we just go with panic and at a later time we will clean it up with a more graceful error handling code
+		panic(err)
 	}
 }
 
-func faq(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>FAQ Page</h1>")
-}
-
-func custom404(w http.ResponseWriter, r *http.Request) {
+func custom404(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusNotFound)
-	fmt.Fprint(w, "<h1>Can't find the page you are looking for</h1><p>email me if you keep seeing this</p>")
+	if err := custom404Template.Execute(w, nil); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
 	var err error
-	homeTemplate, err = template.ParseFiles("views/home.gohtml")
+	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layouts/footer.gohtml") // passing "layouts/footer.gohtml" to link and use the template defined in it
 	if err != nil {
 		panic(err)
 	}
-	contactTemplate, err = template.ParseFiles("views/contact.gohtml")
+	contactTemplate, err = template.ParseFiles("views/contact.gohtml", "views/layouts/footer.gohtml")
 	if err != nil {
-		panic(err) // it is ok to throw panic in initializing code as failure in initialization is normally unrecoverable
+		panic(err)
+	}
+	custom404Template, err = template.ParseFiles("views/custom404.gohtml", "views/layouts/footer.gohtml")
+	if err != nil {
+		panic(err)
 	}
 
 	router := mux.NewRouter()
 	router.HandleFunc("/", home)
 	router.HandleFunc("/contact", contact)
-	router.HandleFunc("/faq", faq)
 	router.NotFoundHandler = http.HandlerFunc(custom404)
 
-	http.ListenAndServe(":3000", router)
+	log.Fatal(http.ListenAndServe(":3000", router))
 }
