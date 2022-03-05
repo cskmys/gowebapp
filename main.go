@@ -33,7 +33,7 @@ func custom404(w http.ResponseWriter, _ *http.Request) {
 
 func main() {
 	var err error
-	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layouts/footer.gohtml") // passing "layouts/footer.gohtml" to link and use the template defined in it
+	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layouts/footer.gohtml")
 	if err != nil {
 		panic(err)
 	}
