@@ -3,17 +3,14 @@
 <html lang="en">
 <head>
     <title>GoWebApp.com</title>
-    <!-- using server links instead of downloading it locally and linking it -->
-    <!-- it is not needed to download and setup bootstrap if done this way -->
     <link href="//maxcdn.bootsrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <!-- using "//" will prompt browser to use whatever protocol that the webpage is being served on -->
 </head>
 <body>
+    {{template "navbar"}}
+
     <div class="container-fluid">
-    <!-- Our content will go here -->
-        {{template "yeild" .}} <!-- Call a template by name "yield" and pass all the dynamic data passed to "bootstrap" template to it -->
+        {{template "yeild" .}}
     </div>
-    <!-- jquery & bootstrap JS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="//maxcdn.bootstrap.cdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
