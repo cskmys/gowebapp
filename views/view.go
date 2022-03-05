@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	LayoutDir     string = "views/layouts/"
-	LayoutFileExt string = "gohtml"
+	LayoutDir     = "views/layouts/"
+	LayoutFileExt = "gohtml"
 )
 
 type View struct {
