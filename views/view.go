@@ -1,8 +1,14 @@
 package views
 
 import (
+	"fmt"
 	"html/template"
 	"path/filepath"
+)
+
+var (
+	LayoutDir     string = "views/layouts/"
+	LayoutFileExt string = "gohtml"
 )
 
 type View struct {
@@ -11,8 +17,7 @@ type View struct {
 }
 
 func NewView(layout string, files ...string) *View {
-	files = append(files, layoutFiles()...) // append takes a variadic parameter as the 2nd argument,
-	// so we put "..." after "layoutFiles()" to unpack it's return which is a string slice and pass it as a variadic parameter
+	files = append(files, layoutFiles()...)
 
 	t, err := template.ParseFiles(files...)
 	if err != nil {
@@ -25,7 +30,8 @@ func NewView(layout string, files ...string) *View {
 }
 
 func layoutFiles() []string {
-	layoutFiles, err := filepath.Glob("views/layouts/*.gohtml")
+	layoutGlob := fmt.Sprintf("%s/*.%s", LayoutDir, LayoutFileExt)
+	layoutFiles, err := filepath.Glob(layoutGlob)
 	if err != nil {
 		panic(err)
 	}
