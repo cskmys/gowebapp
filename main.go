@@ -2,23 +2,23 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"html/template"
+	"gowebapp/views"
 	"log"
 	"net/http"
 )
 
-var homeTemplate, contactTemplate, custom404Template *template.Template
+var homeView, contactView, custom404View *views.View
 
 func home(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Execute(w, nil); err != nil {
+	if err := homeView.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 func contact(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactTemplate.Execute(w, nil); err != nil {
+	if err := contactView.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
@@ -26,25 +26,15 @@ func contact(w http.ResponseWriter, _ *http.Request) {
 func custom404(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusNotFound)
-	if err := custom404Template.Execute(w, nil); err != nil {
+	if err := custom404View.Template.Execute(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 func main() {
-	var err error
-	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layouts/footer.gohtml")
-	if err != nil {
-		panic(err)
-	}
-	contactTemplate, err = template.ParseFiles("views/contact.gohtml", "views/layouts/footer.gohtml")
-	if err != nil {
-		panic(err)
-	}
-	custom404Template, err = template.ParseFiles("views/custom404.gohtml", "views/layouts/footer.gohtml")
-	if err != nil {
-		panic(err)
-	}
+	homeView = views.NewView("views/home.gohtml")
+	contactView = views.NewView("views/contact.gohtml")
+	custom404View = views.NewView("views/custom404.gohtml")
 
 	router := mux.NewRouter()
 	router.HandleFunc("/", home)
