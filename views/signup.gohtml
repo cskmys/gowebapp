@@ -1,5 +1,17 @@
 {{define "yeild"}}
-    <div class="panel panel-default">
+    <div class="row"> <!-- Taken from "Grid system" from "CSS" section in https://getbootstrap.com/docs/3.3/ -->
+        <!-- In bootstrap a page is 12 columns wide -->
+        <!-- any "<div/>" section with class "col-md-x" will occupy "x" units(out of 12 units) of space --->
+        <!-- class "col-md-offset-y" means after the "col-md-x" there will be "y" units of blank space -->
+        <div class="col-md-4 col-md-offset-4"> <!-- 4 units wide(meaning 1/3rd of space) and 4 units of blankspace after this  -->
+            {{template "signupPanel"}}
+        </div>
+    </div>
+{{end}}
+
+{{define "signupPanel"}}
+    <!-- Panel taken from "Components" section in https://getbootstrap.com/docs/3.3/ -->
+    <div class="panel panel-primary"> <!-- Changing "panel-default" to "panel-primary" gives is blue color -->
         <div class="panel-heading">
             <h3 class="panel-title">Signup Now!</h3>
         </div>
