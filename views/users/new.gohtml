@@ -18,7 +18,8 @@
 {{end}}
 
 {{define "signupForm"}}
-    <form>
+    <form action="/signup" method="post"> <!-- To say that the data from the form must be submitted to "/signup" -->
+        <!-- "POST" is default method used by forms to submit the data but just adding here to make it explicit -->
         <div class="form-group">
             <label for="email">Email address</label>
             <input type="email" name="email" class="form-control" id="email" placeholder="Email">
