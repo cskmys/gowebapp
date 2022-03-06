@@ -1,11 +1,15 @@
-<!-- At https://getbootstrap.com/docs/3.3 for a just a page element go to "Components" and -->
-<!-- For a whole page go to "Getting Started" and then find "Examples" on the page and -->
-<!-- Then pick the type of page you'd like, here it is "Sign-in Page" and then click on that -->
-<!-- Then, once the page is loaded, right click and select "View page source" -->
-<!-- Copy it to gohtml file and then trim the unnecessary parts -->
-<!-- For a form go to "CSS" and then find "Forms" on the page and -->
-<!-- Go to the type of form you like, copy its html and paste it in gohtml page and trim unnecessary parts  -->
 {{define "yeild"}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Signup Now!</h3>
+        </div>
+        <div class="panel-body">
+            {{template "signupForm"}}
+        </div>
+    </div>
+{{end}}
+
+{{define "signupForm"}}
     <form>
         <div class="form-group">
             <label for="email">Email address</label>
